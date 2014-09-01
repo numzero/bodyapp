@@ -3,70 +3,311 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+var app=angular.module('mkone', ['ionic']);
 
-.run(function($ionicPlatform) {
+app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
+  if(window.cordova && window.cordova.plugins.Keyboard) {
+    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+  }
+  if(window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider,$urlRouterProvider){
   $stateProvider
+  .state('main',{
+    url:"/main",
+    abstract: true,
+    templateUrl:"templates/main.html",
+    controller: 'formCtrl'
+  })
+  .state('main.list', {
+    url: "/list",
+    views:{
+      'list':{
+       templateUrl: "templates/list.html",
+       controller: 'listCtrl'
+     }
+   }
+ })
+  .state('main.detail', {
+    url: "/detail/:id",
+    views:{
+      'list':{
+       templateUrl: "templates/detail.html",
+       controller: 'detailCtrl'
+     }
+   }
+ })
+  .state('main.form',{
+    url:"/form",
+    views:{
+      'form':{
+       templateUrl:"templates/form.html",
+       controller: 'formCtrl'
+     }
+   }
+ })
+  .state('main.look',{
+    url:"/look",
+    views:{
+      'look':{
+       templateUrl:"templates/looking.html",
+       controller: 'listCtrl'
+     }
+   }
+ });
 
-    .state('app', {
-      url: "/app",
-      abstract: true,
-      templateUrl: "templates/menu.html",
-      controller: 'AppCtrl'
-    })
 
-    .state('app.search', {
-      url: "/search",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/search.html"
-        }
-      }
-    })
+  $urlRouterProvider.otherwise('/main/list');
 
-    .state('app.browse', {
-      url: "/browse",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/browse.html"
-        }
-      }
-    })
-    .state('app.playlists', {
-      url: "/playlists",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/playlists.html",
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
+});
 
-    .state('app.single', {
-      url: "/playlists/:playlistId",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/playlist.html",
-          controller: 'PlaylistCtrl'
+app.factory('send',function($http){
+  return{
+    http : function(url,data){
+      return $http({
+        url:url,
+        method:'post',
+        data:data
+      })
+    }
+  }
+
+});
+
+
+app.controller('listCtrl',function($scope,$location){
+  $scope.minus={
+    behavior:false
+  }
+  $scope.list=[
+  {on:1},
+  {on:2},
+  {on:3},
+  {on:4},
+  {on:5},
+  {on:6},
+  {on:7}
+  ];
+
+  $scope.del=function(id){
+    console.log(id);
+  }
+  $scope.goDetail=function(id){
+    $location.path("/detail/"+id);
+  }
+  $scope.goForm=function(){
+    $location.path("/form");
+  }
+
+});
+
+
+app.controller('detailCtrl',function($scope,$location,$stateParams){
+  console.log($stateParams.id)
+  $scope.des={
+    hide:true
+  }
+  $scope.edit=function(id){
+    console.log(id);
+  }
+  $scope.goList=function(){
+    $location.path("/list");
+  }
+});
+
+
+app.controller('formCtrl',function($scope,$location,send){
+
+  $scope.des={
+    hide:true
+  }
+  $scope.form={};
+  $scope.edit=function(id){
+    console.log(id);
+  }
+  $scope.goList=function(){
+    $location.path("/list");
+  }
+
+  $scope.save=function(){
+   var url="server/upload/upload_c1.php"
+   var data = $scope.form;
+   console.log(data);
+   send.http(url,"d").success(function(data){
+    console.log("data");
+  }).error(function(data, status, headers, config) {
+    console.log("e");
+  });
+
+}
+
+$(function(){
+  var user_id=window.localStorage['user_id']='540';
+  var img_url="server/temp/";
+  var temp_url_c1="server/upload/upload_c1.php?uid="+user_id;
+  var temp_url_c2="server/upload/upload_c2.php?uid="+user_id;
+  var temp_url_l1="server/upload/upload_l1.php?uid="+user_id;
+  var temp_url_l2="server/upload/upload_l2.php?uid="+user_id;
+  var temp_url_l3="server/upload/upload_l3.php?uid="+user_id;
+  var temp_url_l4="server/upload/upload_l4.php?uid="+user_id;
+
+  $("#file_a").on("change",function(){
+    if($("#file_a").val()!=""){
+      $("#prog_a").css('display','block');
+      $("#prog_a").val(0); 
+      $(".img_a").css({'background':"url('/wtf')"});   
+
+      $("#file_a").upload(temp_url_c1,function(success){
+        console.log("done",success);
+        if(success!=false){
+
+          $("#prog_a").fadeOut();
+          $(".img_a").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+        }else{
+          console.log("fail !");
         }
-      }
-    });
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+      },function(prog,value){
+        //console.log(value);
+        $("#prog_a").val(value);
+      });
+    }else{
+     $("#prog_a").css('display','none');
+   }
+ });
+
+  $("#file_b").on("change",function(){
+    if($("#file_b").val()!=""){  
+      $("#prog_b").css('display','block');
+      $("#prog_b").val(0); 
+      $(".img_b").css({'background':"url('/wtf')"}); 
+      $("#file_b").upload(temp_url_c2,function(success){
+        console.log("done",success);
+        if(success!=false){
+
+          $("#prog_b").fadeOut();
+          $(".img_b").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+        }else{
+          console.log("fail !");
+        }
+      },function(prog,value){
+        //console.log(value);
+        $("#prog_b").val(value);
+      });
+    }else{
+     $("#prog_b").css('display','none');
+   }
+ });
+
+  $("#file_c").on("change",function(){
+    if($("#file_c").val()!=""){  
+      $("#prog_c").css('display','block');
+      $("#prog_c").val(0); 
+      $(".img_c").css({'background':"url('/wtf')"}); 
+      $("#file_c").upload(temp_url_l1,function(success){
+        console.log("done",success);
+        if(success!=false){
+
+          $("#prog_c").fadeOut();
+          $(".img_c").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+        }else{
+          console.log("fail !");
+        }
+      },function(prog,value){
+        //console.log(value);
+        $("#prog_c").val(value);
+      });
+    }else{
+      $("#prog_c").css('display','none');
+    }
+  });
+
+  $("#file_d").on("change",function(){
+    if($("#file_d").val()!=""){  
+      $("#prog_d").css('display','block');
+      $("#prog_d").val(0); 
+      $(".img_d").css({'background':"url('/wtf')"}); 
+      $("#file_d").upload(temp_url_l2,function(success){
+        console.log("done",success);
+        if(success!=false){
+
+          $("#prog_d").fadeOut();
+          $(".img_d").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+        }else{
+          console.log("fail !");
+        }
+      },function(prog,value){
+        //console.log(value);
+        $("#prog_d").val(value);
+      });
+    }else{
+     $("#prog_d").css('display','none');
+   }
+ });
+
+  $("#file_e").on("change",function(){
+    if($("#file_e").val()!=""){  
+      $("#prog_e").css('display','block');
+      $("#prog_e").val(0); 
+      $(".img_e").css({'background':"url('/wtf')"}); 
+      $("#file_e").upload(temp_url_l3,function(success){
+        console.log("done",success);
+        if(success!=false){
+
+          $("#prog_e").fadeOut();
+          $(".img_e").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+        }else{
+          console.log("fail !");
+        }
+      },function(prog,value){
+        //console.log(value);
+        $("#prog_e").val(value);
+      });
+    }else{
+     $("#prog_e").css('display','none');
+   }
+ });
+
+  $("#file_f").on("change",function(){
+    if($("#file_f").val()!=""){  
+      $("#prog_f").css('display','block');
+      $("#prog_f").val(0); 
+      $(".img_f").css({'background':"url('/wtf')"}); 
+      $("#file_f").upload(temp_url_l4,function(success){
+        console.log("done",success);
+        if(success!=false){
+
+          $("#prog_f").fadeOut();
+          $(".img_f").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+        }else{
+          console.log("fail !");
+        }
+      },function(prog,value){
+        //console.log(value);
+        $("#prog_f").val(value);
+      });
+    }else{
+      $("#prog_f").css('display','none');
+    }
+  });
+});
+
+
+
+});
+
+app.controller('upload', function($scope,$http){
+  $scope.form={};
+  $scope.save=function(){
+    form=$scope.form;
+    console.log(form);
+  }
 });
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	 <script type="text/javascript" src="lib/upload/lib/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="lib/upload/lib/js/jquery-upload.js"></script>
+	<script>
+	$(function(){
+		$("#upload_a").on("click",function(){
+			$("#prog_a").val(0);
+			$("#status_a").html("loading...");		
+			$("#file_a").upload("upload.php",function(success){
+				console.log("done",success);
+				if(success==true){
+					$("#status_a").html("success !");	
+				}else{
+					$("#status_a").html("Fail  !!!");	
+				}
+			},function(prog,value){
+				//console.log(value);
+				$("#prog_a").val(value);
+			});
+		});
+
+		$("#upload_b").on("click",function(){
+			$("#prog_b").val(0);
+			$("#status_b").html("loading...");		
+			$("#file_b").upload("upload.php",function(success){
+				console.log("done",success);
+				if(success==true){
+					$("#status_b").html("success !");	
+				}else{
+					$("#status_b").html("Fail  !!!");	
+				}
+			},function(prog,value){
+				//console.log(value);
+				$("#prog_b").val(value);
+			});
+		});
+	});
+	</script>
+</head>
+<body>
+	
+	<input type="file" id="file_a" name="file">
+	<input type="button" id="upload_a" value="upload">
+	<br>
+	<progress id="prog_a" value="0" min="0" max="100"></progress>
+	<span id="status_a"></span>
+
+
+<br>
+	<input type="file" id="file_b" name="file">
+	<input type="button" id="upload_b" value="upload">
+	<br>
+	<progress id="prog_b" value="0" min="0" max="100"></progress>
+	<span id="status_b"></span>
+</body>
+</html>

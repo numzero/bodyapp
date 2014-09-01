@@ -1,0 +1,24 @@
+<ion-pane >
+<ion-header-bar class="bar bar-positive bar-header item-input-inset" >
+<!--button class="button button-icon ion-minus-circled" ng-click="minus.behavior =!minus.behavior"></button>
+<h1 class="title">List</h1>
+<button class="button button-icon ion-plus-circled" ng-click="goForm()"></button-->
+	<label class="item-input-wrapper">
+		<i class="icon ion-ios7-search placeholder-icon"></i>
+		<input type="search" ng-model="search" placeholder="Search">
+	</label>
+	<button class="button button-clear" ng-click="search=null">
+		Cancel
+	</button>
+</ion-header-bar>
+
+	<ion-content>
+		<ion-list show-delete="minus.behavior">
+				<ion-item ng-repeat="data in list | filter:search" ng-href="#/main/detail/{{data.on}}">
+						{{data.on}}
+					<ion-delete-button class="ion-minus-circled" ng-click="del(data.on)">
+					</ion-delete-button>
+				</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-pane>
