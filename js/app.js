@@ -138,7 +138,7 @@ app.controller('formCtrl',function($scope,$location,send){
   }
 
   $scope.save=function(){
-   var url="server/upload/upload_c1.php"
+   var url="http://lab.cijcorp.com/mkone/server/upload/upload_c1.php"
    var data = $scope.form;
    console.log(data);
    send.http(url,"d").success(function(data){
@@ -151,13 +151,13 @@ app.controller('formCtrl',function($scope,$location,send){
 
 $(function(){
   var user_id=window.localStorage['user_id']='540';
-  var img_url="server/temp/";
-  var temp_url_c1="server/upload/upload_c1.php?uid="+user_id;
-  var temp_url_c2="server/upload/upload_c2.php?uid="+user_id;
-  var temp_url_l1="server/upload/upload_l1.php?uid="+user_id;
-  var temp_url_l2="server/upload/upload_l2.php?uid="+user_id;
-  var temp_url_l3="server/upload/upload_l3.php?uid="+user_id;
-  var temp_url_l4="server/upload/upload_l4.php?uid="+user_id;
+  var img_url="http://lab.cijcorp.com/mkone/server/temp/";
+  var temp_url_c1="http://lab.cijcorp.com/mkone/server/upload/upload_c1.php?uid="+user_id;
+  var temp_url_c2="http://lab.cijcorp.com/mkone/server/upload/upload_c2.php?uid="+user_id;
+  var temp_url_l1="http://lab.cijcorp.com/mkone/server/upload/upload_l1.php?uid="+user_id;
+  var temp_url_l2="http://lab.cijcorp.com/mkone/server/upload/upload_l2.php?uid="+user_id;
+  var temp_url_l3="http://lab.cijcorp.com/mkone/server/upload/upload_l3.php?uid="+user_id;
+  var temp_url_l4="http://lab.cijcorp.com/mkone/server/upload/upload_l4.php?uid="+user_id;
 
   $("#file_a").on("change",function(){
     if($("#file_a").val()!=""){
