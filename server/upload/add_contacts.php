@@ -1,4 +1,5 @@
 <?
+include 'header.php';
 include 'lib/contacts.php';
 $user_id=540;
 $phone="0949377560";
