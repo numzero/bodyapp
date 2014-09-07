@@ -106,7 +106,7 @@ app.factory('popup',function($ionicPopup){
 app.controller('listCtrl',function($scope,$location,$http){
 
 
-  var url="server/ws/view-contacts-ws.php";
+  var url="http://lab.cijcorp.com/mkone/server/ws/view-contacts-ws.php";
   $http.get(url).success(function(data){
    $scope.list=data;
    console.log($scope.list)
@@ -119,7 +119,7 @@ app.controller('listCtrl',function($scope,$location,$http){
 app.controller('detailCtrl',function($scope,$location,$stateParams,send){
 
   console.log($stateParams.id)
-  var url="server/ws/view-detail-ws.php";
+  var url="http://lab.cijcorp.com/mkone/server/ws/view-detail-ws.php";
   var data={tel:$stateParams.id};
   $scope.list={};
   send.http(url,data).success(function(data){
@@ -131,20 +131,12 @@ app.controller('detailCtrl',function($scope,$location,$stateParams,send){
 
 app.controller('lookCtrl',function($scope,$location,$stateParams,$http){
 
- var url="server/ws/view-looking-ws.php";
+ var url="http://lab.cijcorp.com/mkone/server/ws/view-looking-ws.php";
  $http.get(url).success(function(data){
    $scope.list=data;
    console.log($scope.list)
  });
 
-/*$scope.list=[
-  {on:1,no:5},
-  {on:2,no:6},
-  {on:3,no:7},
-  {on:4,no:8},
-  {on:5,no:9},
-  {on:6,no:10},
-  ];*/
 
 });
 
@@ -167,7 +159,7 @@ app.controller('formCtrl',function($scope,$location,send,popup){
   }
   $scope.formData={};
   $scope.save=function(){
-   var url="server/upload/add_contacts.php";
+   var url="http://lab.cijcorp.com/mkone/server/upload/add_contacts.php";
    $scope.formData.user_id=user_id;
    var data = $scope.formData;
    //console.log(data);
@@ -188,20 +180,20 @@ app.controller('formCtrl',function($scope,$location,send,popup){
 
 $(function(){
 
-  /*var img_url="http://lab.cijcorp.com/mkone/server/temp/";
+  var img_url="http://lab.cijcorp.com/mkone/server/temp/";
   var temp_url_c1="http://lab.cijcorp.com/mkone/server/upload/upload_c1.php?uid="+user_id;
   var temp_url_c2="http://lab.cijcorp.com/mkone/server/upload/upload_c2.php?uid="+user_id;
   var temp_url_l1="http://lab.cijcorp.com/mkone/server/upload/upload_l1.php?uid="+user_id;
   var temp_url_l2="http://lab.cijcorp.com/mkone/server/upload/upload_l2.php?uid="+user_id;
   var temp_url_l3="http://lab.cijcorp.com/mkone/server/upload/upload_l3.php?uid="+user_id;
-  var temp_url_l4="http://lab.cijcorp.com/mkone/server/upload/upload_l4.php?uid="+user_id;*/
-  var img_url="server/temp/";
+  var temp_url_l4="http://lab.cijcorp.com/mkone/server/upload/upload_l4.php?uid="+user_id;
+  /*var img_url="server/temp/";
   var temp_url_c1="server/upload/upload_c1.php?uid="+user_id;
   var temp_url_c2="server/upload/upload_c2.php?uid="+user_id;
   var temp_url_l1="server/upload/upload_l1.php?uid="+user_id;
   var temp_url_l2="server/upload/upload_l2.php?uid="+user_id;
   var temp_url_l3="server/upload/upload_l3.php?uid="+user_id;
-  var temp_url_l4="server/upload/upload_l4.php?uid="+user_id;
+  var temp_url_l4="server/upload/upload_l4.php?uid="+user_id;*/
 
   $("#file_a").on("change",function(){
     if($("#file_a").val()!=""){
