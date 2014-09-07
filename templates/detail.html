@@ -1,0 +1,64 @@
+<ion-pane>
+
+    <ion-header-bar class="bar bar-positive">
+        <a class="button button-icon ion-chevron-left" href="#/list">Back</a>
+        <h1 class="title">Contacts Description</h1>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list card">
+
+            <ion-slide-box class="super">
+                <ion-slide >
+                    <img ng-src="server/real/{{list[0][7]}}" alt="">
+                </ion-slide>
+                <ion-slide>
+                    <img ng-src="server/real/{{list[0][8]}}" alt=""> 
+                </ion-slide>
+            </ion-slide-box>
+            
+            <div class="item item-divider">
+                Description
+            </div>
+
+            <div class="row">
+              <div class="col-20">Tel  </div>
+              <div class="col">{{list[0][0]}}</div>
+            </div>
+
+            <div class="row">
+              <div class="col-20">Name  </div>
+              <div class="col">{{list[0][1]}}</div>
+          </div>
+
+
+          <div class="row">
+              <div class="col-20">Nickname  </div>
+              <div class="col">{{list[0][2]}}</div>
+          </div>
+
+
+          <div class="row">
+              <div class="col-20">Email  </div>
+              <div class="col">{{list[0][3]}}</div>
+          </div>
+
+
+          <div class="row">
+              <div class="col-20">Keyword</div>
+              <div class="col">{{list[0][4]}}</div>
+          </div>
+
+
+          <div class="row">
+              <div class="col-20">Type  </div>
+              <div class="col">{{list[0][5]}}</div>
+          </div>
+
+         
+
+       </div>
+            
+         
+      
+    </ion-content>
+</ion-pane>

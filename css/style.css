@@ -1,0 +1,38 @@
+/* Empty. Add your own CSS if you like */
+/*form*/
+.invalid-true input{
+	border:1px solid #17ECE7;
+	box-shadow: 0 0 10px #17ECE7;
+}
+.invalid-false input{
+	border:1px solid #F24206;
+	box-shadow: 0 0 20px #F24206;
+}
+
+/*detail*/
+.row{
+	font-size: 20px;
+	border-bottom: 1px solid #C7A2F0;
+}
+.row:nth-child(odd){   
+
+	border-bottom: 1px solid #C7A2F0;
+}
+.row:nth-child(even){
+	border-bottom: 1px solid #C7A2F0;
+}
+
+.col{
+	border-left: 1px solid #C7A2F0;
+	margin-top:10px;
+}
+.col-20{
+	margin:15px 0 0 5px;
+}
+.super img{
+	display: block;
+	margin: auto;
+	width: auto;
+	height: 400px;
+	box-shadow: 0 0 20px black;
+}

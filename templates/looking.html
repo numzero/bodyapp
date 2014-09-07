@@ -1,0 +1,34 @@
+<ion-pane >
+<style>
+	.left{
+		float:left;
+	}
+	.right{
+		float:right;
+	}
+</style>
+<ion-header-bar class="bar bar-positive bar-header item-input-inset" >
+	<label class="item-input-wrapper">
+		<i class="icon ion-ios7-search placeholder-icon"></i>
+		<input type="search" ng-model="search" placeholder="Search">
+	</label>
+	<button class="button button-clear" ng-click="search=null">
+		Cancel
+	</button>
+</ion-header-bar>
+
+	<ion-content>
+		<ion-list >
+				<ion-item class="item item-thumbnail-left" ng-repeat="data in list | filter:search | orderBy:'-[2]'"  >
+				<img ng-src="server/real/{{data[3]}}" alt="">
+				<h2 class="left">
+					{{data[1]}}
+				</h2> 
+				<h2 class="right">
+					{{data[2]}}
+
+				</h2>			
+				</ion-item>
+		</ion-list>
+	</ion-content>
+</ion-pane>
