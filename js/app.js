@@ -214,7 +214,7 @@ $(function(){
       },function(prog,value){
                     //console.log(value);
                     $("#prog_a").val(value);
-                  });
+      });
     }else{
      $("#prog_a").css('display','none');
    }
