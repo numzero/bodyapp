@@ -19,7 +19,8 @@
 
 	<ion-content>
 		<ion-list >
-				<ion-item class="item item-thumbnail-left" ng-repeat="data in list | filter:search | orderBy:'-[2]'"  >
+				<ion-item class="item item-thumbnail-left" ng-repeat="data in list | filter:search | orderBy:'-[2]'"  
+				ng-href="#/main/look-detail/{{data[0]}}">
 				<img ng-src="http://lab.cijcorp.com/mkone/server/real/{{data[3]}}" alt="">
 				<h2 class="left">
 					{{data[1]}}

@@ -8,7 +8,7 @@
 		Cancel
 	</button>
 </ion-header-bar>
-
+	{{loadingIndicator}}
 	<ion-content>
 		<ion-list>
 				<ion-item class="item item-thumbnail-left"  ng-repeat="data in list | filter:search" ng-href="#/main/detail/{{data[0]}}">					

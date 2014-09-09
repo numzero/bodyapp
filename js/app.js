@@ -64,7 +64,25 @@ app.config(function($stateProvider,$urlRouterProvider){
        controller: 'lookCtrl'
      }
    }
- });
+ })
+  .state('main.look-detail',{
+    url:'/look-detail/:id',
+    views:{
+      'look':{
+        templateUrl:'templates/look-detail.html',
+        controller:'lookDetail'
+      }
+    }
+  })
+  .state('main.look-form',{
+    url:'/look-form',
+    views:{
+      'look-form':{
+        templateUrl:'templates/look-detail.html',
+        controller:''
+      }
+    }
+  });
 
 
   $urlRouterProvider.otherwise('/main/list');
@@ -78,6 +96,13 @@ app.factory('send',function($http){
         url:url,
         method:'post',
         data:data
+      })
+    },
+    params:function(url,param){
+      return $http({
+        url:url,
+        method:'post',
+        params:param
       })
     }
   }
@@ -103,44 +128,72 @@ app.factory('popup',function($ionicPopup){
 
 });
 
-app.controller('listCtrl',function($scope,$location,$http){
+app.controller('listCtrl',function($scope,$location,$http,$ionicLoading){
 
-
-  var url="http://lab.cijcorp.com/mkone/server/ws/view-contacts-ws.php";
-  $http.get(url).success(function(data){
-   $scope.list=data;
-   console.log($scope.list)
-  });
-
-
+ $ionicLoading.show({
+  template: '<i class="icon ion-looping"></i>',
+  animation: 'fade-in'
 });
 
-
-app.controller('detailCtrl',function($scope,$location,$stateParams,send){
-
-  console.log($stateParams.id)
-  var url="http://lab.cijcorp.com/mkone/server/ws/view-detail-ws.php";
-  var data={tel:$stateParams.id};
-  $scope.list={};
-  send.http(url,data).success(function(data){
-    $scope.list=data;
-   console.log(data);
-  });
-
-});
-
-app.controller('lookCtrl',function($scope,$location,$stateParams,$http){
-
- var url="http://lab.cijcorp.com/mkone/server/ws/view-looking-ws.php";
+ var url="http://lab.cijcorp.com/mkone/server/ws/view-contacts-ws.php";
  $http.get(url).success(function(data){
    $scope.list=data;
    console.log($scope.list)
+   $ionicLoading.hide();
  });
 
 
 });
 
-app.controller('formCtrl',function($scope,$location,send,popup){
+
+app.controller('detailCtrl',function($scope,$location,$stateParams,send,$ionicLoading){
+  $ionicLoading.show({
+    template:'<i class="icon ion-looping"></i>',
+    animation:'fade-in'
+  });
+  console.log($stateParams.id)
+  var url="http://lab.cijcorp.com/mkone/server/ws/view-contact-detail-ws.php";
+  var data={tel:$stateParams.id};
+  $scope.list={};
+  send.http(url,data).success(function(data){
+    $scope.list=data;
+    console.log(data);
+    $ionicLoading.hide();
+  });
+
+});
+
+app.controller('lookCtrl',function($scope,$location,$stateParams,$http,$ionicLoading){
+
+  $ionicLoading.show({
+    template:'<i class="icon ion-looping"></i>',
+    animation:'fade-in'
+  })
+  var url="http://lab.cijcorp.com/mkone/server/ws/view-looking-ws.php";
+  $http.get(url).success(function(data){
+   $scope.list=data;
+   console.log($scope.list)
+   $ionicLoading.hide();
+ });
+
+
+});
+app.controller('lookDetail',function($scope,$stateParams,send,$ionicLoading){
+
+  $ionicLoading.show({
+    template:'<i class="icon ion-looping"></i>',
+    animation:'fade-in'
+  })
+
+  var url="http://lab.cijcorp.com/mkone/server/ws/view-looking-detail-ws.php";
+  var data={tel:$stateParams.id};
+   send.http(url,data).success(function(data){
+    $scope.data=data;
+    $ionicLoading.hide();
+  });
+});
+
+app.controller('formCtrl',function($scope,$location,send,popup,$ionicLoading){
 
   var user_id=window.localStorage['user_id']='540';
 
@@ -148,7 +201,6 @@ app.controller('formCtrl',function($scope,$location,send,popup){
     hide:true
   }
 
-  
 
   $scope.edit=function(id){
     console.log(id);
@@ -214,7 +266,7 @@ $(function(){
       },function(prog,value){
                     //console.log(value);
                     $("#prog_a").val(value);
-      });
+                  });
     }else{
      $("#prog_a").css('display','none');
    }
@@ -355,11 +407,5 @@ $(function(){
         //end jquery
       });
 });
-app.controller('upload', function($scope,$http){
-  $scope.form={};
-  $scope.save=function(){
-    form=$scope.form;
-    console.log(form);
-  }
-});
+
 
