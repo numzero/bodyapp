@@ -124,12 +124,18 @@ app.factory('popup',function($ionicPopup){
         title:title,
         template:'<h3 class="ion-alert-circled">Tel. has been used</h3>'
       })
-    }
-  }
+    },
+    confirm :function(){
+     return $ionicPopup.confirm({
+       title:title,
+       template: '<h3>Confirm to delete object?</h3>'
+     });
+   }
+ }
 
 });
 
-app.controller('listCtrl',function($scope,$location,$http,$ionicLoading){
+app.controller('listCtrl',function($scope,$location,$http,$ionicLoading,popup){
 
  $ionicLoading.show({
   template: '<i class="icon ion-looping"></i>',
@@ -142,6 +148,19 @@ app.controller('listCtrl',function($scope,$location,$http,$ionicLoading){
    console.log($scope.list)
    $ionicLoading.hide();
  });
+
+ $scope.goEdit=function(id){
+   console.log(id);
+ }
+ $scope.confirm=function(id){
+  popup.confirm().then(function(res) {
+   if(res){
+     console.log(id);
+   } else {
+     console.log(id);
+   }
+ });
+}
 
 
 });
@@ -164,7 +183,7 @@ app.controller('detailCtrl',function($scope,$location,$stateParams,send,$ionicLo
 
 });
 
-app.controller('lookCtrl',function($scope,$location,$stateParams,$http,$ionicLoading){
+app.controller('lookCtrl',function($scope,$location,$stateParams,$http,$ionicLoading,popup){
 
   $ionicLoading.show({
     template:'<i class="icon ion-looping"></i>',
@@ -177,6 +196,19 @@ app.controller('lookCtrl',function($scope,$location,$stateParams,$http,$ionicLoa
    $ionicLoading.hide();
  });
 
+  $scope.goEdit=function(id){
+   console.log(id);
+ }
+
+ $scope.confirm=function(id){
+  popup.confirm().then(function(res) {
+   if(res){
+     console.log(id);
+   } else {
+     console.log(id);
+   }
+ });
+}
 
 });
 app.controller('lookDetail',function($scope,$stateParams,send,$ionicLoading){
@@ -188,7 +220,7 @@ app.controller('lookDetail',function($scope,$stateParams,send,$ionicLoading){
 
   var url="http://lab.cijcorp.com/mkone/server/ws/view-looking-detail-ws.php";
   var data={tel:$stateParams.id};
-   send.http(url,data).success(function(data){
+  send.http(url,data).success(function(data){
     $scope.data=data;
     $ionicLoading.hide();
   });
@@ -199,7 +231,7 @@ app.controller('lookForm',function($scope,$stateParams,$location,send,popup){
   $scope.formData={};
   $scope.submit=function(){
    $scope.data={tel:$scope.id,look:$scope.formData.txt_look};
-    var url="http://lab.cijcorp.com/mkone/server/ws/add-looking-ws.php";
+   var url="http://lab.cijcorp.com/mkone/server/ws/add-looking-ws.php";
    send.http(url,$scope.data).success(function(data){
     if(data==true){
       popup.complete();
@@ -208,9 +240,9 @@ app.controller('lookForm',function($scope,$stateParams,$location,send,popup){
       popup.unComplete();
       console.log(data);
     } 
-   })
+  })
    
-  }
+ }
 
 });
 app.controller('formCtrl',function($scope,$location,send,popup,$ionicLoading){
