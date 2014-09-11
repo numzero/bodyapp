@@ -29,10 +29,28 @@
 .col-20{
 	margin:15px 0 0 5px;
 }
-.super img{
-	display: block;
-	margin: auto;
-	width: auto;
-	height: 400px;
-	box-shadow: 0 0 20px black;
+
+@media only screen and (max-width:400px){
+	.super img{
+		display: block;
+		margin: 20px auto;
+		max-width: 80%;
+		max-height: 190px;
+		box-shadow: 0 0 5px black;
+	}
+	.bg{
+		height: 200px;
+	}
+}
+@media only screen and (min-width:400px){
+	.super img{
+		display: block;
+		margin: 20px auto;
+		max-width: 80%;
+		max-height: 390px;
+		box-shadow: 0 0 5px black;
+	}
+	.bg{
+		height: 400px;
+	}
 }

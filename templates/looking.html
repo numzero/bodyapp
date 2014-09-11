@@ -22,12 +22,12 @@
 				<ion-item class="item item-thumbnail-left" ng-repeat="data in list | filter:search | orderBy:'-[2]'"  
 				ng-href="#/main/look-detail/{{data[0]}}">
 				<img ng-src="http://lab.cijcorp.com/mkone/server/real/{{data[3]}}" alt="">
-				<h2 class="left">
-					{{data[1]}}
-				</h2> 
+				<div class="left">
+					<h2>Looking : {{data[1]}}</h2>
+					<!--h2>Tel : {{data[0]}}</h2-->
+				</div> 
 				<h2 class="right">
 					{{data[2]}}
-
 				</h2>			
 				</ion-item>
 		</ion-list>

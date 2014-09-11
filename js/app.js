@@ -62,6 +62,7 @@ app.config(function($stateProvider,$urlRouterProvider){
       'look':{
        templateUrl:"templates/looking.html",
        controller: 'lookCtrl'
+
      }
    }
  })
@@ -75,11 +76,11 @@ app.config(function($stateProvider,$urlRouterProvider){
     }
   })
   .state('main.look-form',{
-    url:'/look-form',
+    url:'/look-form/:id',
     views:{
-      'look-form':{
-        templateUrl:'templates/look-detail.html',
-        controller:''
+      'look':{
+        templateUrl:'templates/look-form.html',
+        controller:'lookForm'
       }
     }
   });
@@ -193,6 +194,25 @@ app.controller('lookDetail',function($scope,$stateParams,send,$ionicLoading){
   });
 });
 
+app.controller('lookForm',function($scope,$stateParams,$location,send,popup){
+  $scope.id=$stateParams.id;
+  $scope.formData={};
+  $scope.submit=function(){
+   $scope.data={tel:$scope.id,look:$scope.formData.txt_look};
+    var url="http://lab.cijcorp.com/mkone/server/ws/add-looking-ws.php";
+   send.http(url,$scope.data).success(function(data){
+    if(data==true){
+      popup.complete();
+      $location.path("/main/look");
+    }else{
+      popup.unComplete();
+      console.log(data);
+    } 
+   })
+   
+  }
+
+});
 app.controller('formCtrl',function($scope,$location,send,popup,$ionicLoading){
 
   var user_id=window.localStorage['user_id']='540';

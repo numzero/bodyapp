@@ -2,15 +2,40 @@
   <ion-header-bar class="bar bar-positive">
         <a class="button button-icon ion-chevron-left" href="#/main/look">Back</a>
         <h1 class="title">Looking Detail</h1>
+        <a class="button button-icon ion-plus-round" href="#/main/look-form/{{data[0]}}"></a>
     </ion-header-bar>
     <ion-content>
-		<li>{{data[0]}}</li>
-		<li>{{data[1]}}</li>
-		<li>{{data[2]}}</li>
-		<img src="http://lab.cijcorp.com/mkone/server/real/{{data[4]}}" alt="">
-		<img src="http://lab.cijcorp.com/mkone/server/real/{{data[5]}}" alt="">
-		<img src="http://lab.cijcorp.com/mkone/server/real/{{data[6]}}" alt="">
-		<img src="http://lab.cijcorp.com/mkone/server/real/{{data[7]}}" alt="">
-		
+    <div class="card">
+	    <ion-slide-box class="super ">
+			<ion-slide >
+				<div class="bg"><img src="http://lab.cijcorp.com/mkone/server/real/{{data[4]}}" alt="" ></div>
+			</ion-slide>
+			<ion-slide>
+				<div class="bg"><img src="http://lab.cijcorp.com/mkone/server/real/{{data[5]}}" alt=""></div>
+			</ion-slide>
+			<ion-slide >
+				<div class="bg"><img src="http://lab.cijcorp.com/mkone/server/real/{{data[6]}}" alt=""></div>
+			</ion-slide>
+			<ion-slide >
+				<div class="bg"><img src="http://lab.cijcorp.com/mkone/server/real/{{data[7]}}" alt=""></div>
+			</ion-slide>
+		</ion-slide-box>
+
+		<label class="item item-input">
+			<span class="input-label">Who Tel.</span>
+			<span>{{data[0]}}</span>
+		</label>
+
+		<label class="item item-input">
+			<span class="input-label">Looking For</span>
+			<span>{{data[1]}}</span>
+		</label>
+
+		<label class="item item-input">
+			<span class="input-label">Date & Time</span>
+			<span>{{data[2]}}</span>
+		</label>
+
+	</div>
 	</ion-content>
 </ion-pane>

@@ -1,0 +1,27 @@
+<ion-pane>
+	<ion-header-bar class="bar bar-positive">
+	<a class="button button-icon ion-chevron-left" href="#/main/look-detail/{{id}}">Back</a>
+		<h1 class="title">Add Looking</h1>
+	</ion-header-bar>
+	<ion-content>
+		<div class="card">
+			<div class="item item-dividor">
+				Looking Form
+			</div>
+			<form name="form" ng-submit="submit()">
+				<label class="item item-input">
+					<span class="input-label">Tel.</span>
+					<input type="text" name="txt_id" value="{{id}}"  ng-readonly="true">
+				</label>
+
+				<label class="item item-input " 
+                    ng-class="{'invalid-false':form.txt_look.$invalid && !form.txt_look.$pristine,'invalid-true':form.txt_look.$invalid ==false}">
+					<span class="input-label">Looking For</span>
+					<input type="text" required maxlength="100" name="txt_look" ng-model="formData.txt_look" placeholder="Looking For" >
+				</label>
+
+				<button class="button button-positive button-full" type="submit">save</button>
+			</form>
+		</div>
+	</ion-content>
+</ion-pane>
