@@ -491,7 +491,10 @@ $(function(){
 
 app.controller('editCon',function($scope,$location,send,popup,$ionicLoading,$stateParams){
   var user_id=window.localStorage['user_id']='540';
-  
+    $ionicLoading.show({
+    template:'<i class="icon ion-looping"></i>',
+    animation:'fade-in'
+  })
   var url="http://lab.cijcorp.com/mkone/server/ws/view-contact-detail-ws.php";
   var data={tel:$stateParams.id};
   send.http(url,data).success(function(data){
@@ -518,7 +521,7 @@ app.controller('editCon',function($scope,$location,send,popup,$ionicLoading,$sta
       $(".img_"+word[j]).css({'background':"url('"+data[0][i]+"') 0 0 no-repeat",'background-size':'200px'}); 
       j++;
     }
-
+    $ionicLoading.hide();
   });
 
   $scope.save=function(){
