@@ -19,7 +19,7 @@
 
 	<ion-content>
 		<ion-list >
-				<ion-item class="item item-thumbnail-left" ng-repeat="data in list | filter:search | orderBy:'-[2]'"  
+				<ion-item class="item item-thumbnail-left" ng-repeat="data in list | filter:search"  
 				ng-href="#/main/look-detail/{{data[0]}}">
 				<img ng-src="http://lab.cijcorp.com/mkone/server/real/{{data[3]}}" alt="">
 				<div class="left">
@@ -30,7 +30,7 @@
 					{{data[2]}}
 				</h2>
 				<ion-option-button class="button-positive" ng-click="goEdit('{{data[0]}}')">Edit</ion-option-button>
-							<ion-option-button class="button-assertive" ng-click="confirm('{{data[0]}}')">Delete</ion-option-button>			
+							<ion-option-button class="button-assertive" ng-click="confirm($index,'{{data[0]}}','{{data[2]}}')">Delete</ion-option-button>			
 				</ion-item>
 		</ion-list>
 	</ion-content>

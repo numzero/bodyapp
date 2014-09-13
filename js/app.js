@@ -1,8 +1,3 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
 
 var app=angular.module('mkone', ['ionic']);
 
@@ -10,13 +5,12 @@ var app=angular.module('mkone', ['ionic']);
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-  if(window.cordova && window.cordova.plugins.Keyboard) {
-    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-  }
-  if(window.StatusBar) {
-      // org.apache.cordova.statusbar required
+
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+
       StatusBar.styleDefault();
     }
   });
@@ -56,6 +50,15 @@ app.config(function($stateProvider,$urlRouterProvider){
      }
    }
  })
+  .state('main.editCon',{
+    url:'/editCon/:id',
+    views:{
+      'list':{
+        templateUrl:"templates/editCon.html",
+        controller: 'editCon'
+      }
+    }
+  })
   .state('main.look',{
     url:"/look",
     views:{
@@ -83,7 +86,16 @@ app.config(function($stateProvider,$urlRouterProvider){
         controller:'lookForm'
       }
     }
-  });
+  })
+  .state('main.editLook',{
+    url:'/editLooK/:id',
+    views:{
+      'look':{
+       templateUrl:'templates/editLook.html',
+       controller: 'editLook'
+     }
+   }
+ });
 
 
   $urlRouterProvider.otherwise('/main/list');
@@ -128,15 +140,14 @@ app.factory('popup',function($ionicPopup){
     confirm :function(){
      return $ionicPopup.confirm({
        title:title,
-       template: '<h3>Confirm to delete object?</h3>'
+       template: '<h4>Confirm to delete object?</h4>'
      });
    }
  }
 
 });
 
-app.controller('listCtrl',function($scope,$location,$http,$ionicLoading,popup){
-
+app.controller('listCtrl',function($scope,$location,$http,$ionicLoading,popup,$filter,send){
  $ionicLoading.show({
   template: '<i class="icon ion-looping"></i>',
   animation: 'fade-in'
@@ -144,18 +155,28 @@ app.controller('listCtrl',function($scope,$location,$http,$ionicLoading,popup){
 
  var url="http://lab.cijcorp.com/mkone/server/ws/view-contacts-ws.php";
  $http.get(url).success(function(data){
+   orderBy=$filter('orderBy');
    $scope.list=data;
-   console.log($scope.list)
+   $scope.list= orderBy($scope.list,'1');
+   console.log($scope.list[0][1])
    $ionicLoading.hide();
  });
 
  $scope.goEdit=function(id){
-   console.log(id);
+
+   $location.path('/main/editCon/'+id);
  }
- $scope.confirm=function(id){
+ $scope.confirm=function(id,$index){
+
   popup.confirm().then(function(res) {
    if(res){
+     $scope.list.splice($index,1);
      console.log(id);
+     var url="http://lab.cijcorp.com/mkone/server/ws/view-remove-list-ws.php";
+     var data={tel:id};
+     send.http(url,data).success(function(data){
+      console.log(data);
+    });
    } else {
      console.log(id);
    }
@@ -183,7 +204,7 @@ app.controller('detailCtrl',function($scope,$location,$stateParams,send,$ionicLo
 
 });
 
-app.controller('lookCtrl',function($scope,$location,$stateParams,$http,$ionicLoading,popup){
+app.controller('lookCtrl',function($scope,$location,$stateParams,$http,$ionicLoading,send,popup,$filter){
 
   $ionicLoading.show({
     template:'<i class="icon ion-looping"></i>',
@@ -191,24 +212,32 @@ app.controller('lookCtrl',function($scope,$location,$stateParams,$http,$ionicLoa
   })
   var url="http://lab.cijcorp.com/mkone/server/ws/view-looking-ws.php";
   $http.get(url).success(function(data){
+   orderBy = $filter('orderBy');
    $scope.list=data;
+   $scope.list= orderBy($scope.list,'-2');
    console.log($scope.list)
    $ionicLoading.hide();
  });
 
   $scope.goEdit=function(id){
-   console.log(id);
- }
+    $location.path('/main/editLooK/'+id);
+  }
 
- $scope.confirm=function(id){
-  popup.confirm().then(function(res) {
-   if(res){
-     console.log(id);
-   } else {
+  $scope.confirm=function($index,id,date){
+    popup.confirm().then(function(res) {
+     if(res){
+      $scope.list.splice($index,1);
+      
+      var url="http://lab.cijcorp.com/mkone/server/ws/view-remove-look-ws.php";
+      var data={tel:id,date:date};
+      send.http(url,data).success(function(data){
+        console.log(data);
+      });
+    } else {
      console.log(id);
    }
  });
-}
+  }
 
 });
 app.controller('lookDetail',function($scope,$stateParams,send,$ionicLoading){
@@ -291,173 +320,383 @@ $(function(){
   var temp_url_l2="http://lab.cijcorp.com/mkone/server/upload/upload_l2.php?uid="+user_id;
   var temp_url_l3="http://lab.cijcorp.com/mkone/server/upload/upload_l3.php?uid="+user_id;
   var temp_url_l4="http://lab.cijcorp.com/mkone/server/upload/upload_l4.php?uid="+user_id;
-  /*var img_url="server/temp/";
-  var temp_url_c1="server/upload/upload_c1.php?uid="+user_id;
-  var temp_url_c2="server/upload/upload_c2.php?uid="+user_id;
-  var temp_url_l1="server/upload/upload_l1.php?uid="+user_id;
-  var temp_url_l2="server/upload/upload_l2.php?uid="+user_id;
-  var temp_url_l3="server/upload/upload_l3.php?uid="+user_id;
-  var temp_url_l4="server/upload/upload_l4.php?uid="+user_id;*/
+    /*var img_url="server/temp/";
+    var temp_url_c1="server/upload/upload_c1.php?uid="+user_id;
+    var temp_url_c2="server/upload/upload_c2.php?uid="+user_id;
+    var temp_url_l1="server/upload/upload_l1.php?uid="+user_id;
+    var temp_url_l2="server/upload/upload_l2.php?uid="+user_id;
+    var temp_url_l3="server/upload/upload_l3.php?uid="+user_id;
+    var temp_url_l4="server/upload/upload_l4.php?uid="+user_id;*/
 
-  $("#file_a").on("change",function(){
-    if($("#file_a").val()!=""){
-      $("#prog_a").css('display','block');
-      $("#prog_a").val(0);    
-      $(".img_a").css({'background':"url('')"}); 
-      setTimeout(function () { $(".img_a").css({'background':"rgba(88,88,88,.1)"}); }, 2);
-      $("#file_a").upload(temp_url_c1,function(success){
-        console.log("done",success);
-        if(success!=false){
-          $(".img_a").css('display','none');
-          $("#prog_a").fadeOut();
-          $(".img_a").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
-          $(".img_a").fadeIn();
-        }else{
-          console.log("fail !");
-        }
-      },function(prog,value){
+    $("#file_a").on("change",function(){
+      if($("#file_a").val()!=""){
+        $("#prog_a").css('display','block');
+        $("#prog_a").val(0);    
+        $(".img_a").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_a").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_a").upload(temp_url_c1,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_a").css('display','none');
+            $("#prog_a").fadeOut();
+            $(".img_a").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_a").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_a").val(value);
+                    });
+      }else{
+       $("#prog_a").css('display','none');
+     }
+   });
+
+    $("#file_b").on("change",function(){
+      if($("#file_b").val()!=""){
+        $("#prog_b").css('display','block');
+        $("#prog_b").val(0);    
+        $(".img_b").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_b").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_b").upload(temp_url_c2,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_b").css('display','none');
+            $("#prog_b").fadeOut();
+            $(".img_b").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_b").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_b").val(value);
+                    });
+      }else{
+       $("#prog_b").css('display','none');
+     }
+   });
+
+
+    $("#file_c").on("change",function(){
+      if($("#file_c").val()!=""){
+        $("#prog_c").css('display','block');
+        $("#prog_c").val(0);    
+        $(".img_c").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_c").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_c").upload(temp_url_l1,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_c").css('display','none');
+            $("#prog_c").fadeOut();
+            $(".img_c").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_c").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_c").val(value);
+                    });
+      }else{
+       $("#prog_c").css('display','none');
+     }
+   });
+
+
+
+    $("#file_d").on("change",function(){
+      if($("#file_d").val()!=""){
+        $("#prog_d").css('display','block');
+        $("#prog_d").val(0);    
+        $(".img_d").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_d").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_d").upload(temp_url_l2,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_d").css('display','none');
+            $("#prog_d").fadeOut();
+            $(".img_d").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_d").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_d").val(value);
+                    });
+      }else{
+       $("#prog_d").css('display','none');
+     }
+   });
+
+
+
+    $("#file_e").on("change",function(){
+      if($("#file_e").val()!=""){
+        $("#prog_e").css('display','block');
+        $("#prog_e").val(0);    
+        $(".img_e").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_e").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_e").upload(temp_url_l3,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_e").css('display','none');
+            $("#prog_e").fadeOut();
+            $(".img_e").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_e").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_e").val(value);
+                    });
+      }else{
+       $("#prog_e").css('display','none');
+     }
+   });
+
+
+    $("#file_f").on("change",function(){
+      if($("#file_f").val()!=""){
+        $("#prog_f").css('display','block');
+        $("#prog_f").val(0);    
+        $(".img_f").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_f").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_f").upload(temp_url_l4,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_f").css('display','none');
+            $("#prog_f").fadeOut();
+            $(".img_f").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_f").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_f").val(value);
+                    });
+      }else{
+       $("#prog_f").css('display','none');
+     }
+   });
+
+
+    //end jquery
+  });
+});
+
+app.controller('editCon',function($scope,$location,send,popup,$ionicLoading,$stateParams){
+  var user_id=window.localStorage['user_id']='540';
+  console.log($stateParams.id)
+  var url="http://lab.cijcorp.com/mkone/server/ws/view-contact-detail-ws.php";
+  var data={tel:$stateParams.id};
+  send.http(url,data).success(function(data){
+    console.log(data);
+    $scope.formData={
+      name:data[0][2],
+      nname:data[0][1],
+      tel:data[0][0],
+      email:data[0][3],
+      keyword:data[0][4],
+      type:data[0][5]
+    };
+  });
+
+
+  $(function(){
+
+    var img_url="http://lab.cijcorp.com/mkone/server/temp/";
+    var temp_url_c1="http://lab.cijcorp.com/mkone/server/upload/upload_c1.php?uid="+user_id;
+    var temp_url_c2="http://lab.cijcorp.com/mkone/server/upload/upload_c2.php?uid="+user_id;
+
+
+    $("#file_a").on("change",function(){
+      if($("#file_a").val()!=""){
+        $("#prog_a").css('display','block');
+        $("#prog_a").val(0);    
+        $(".img_a").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_a").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_a").upload(temp_url_c1,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_a").css('display','none');
+            $("#prog_a").fadeOut();
+            $(".img_a").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_a").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
                     //console.log(value);
                     $("#prog_a").val(value);
                   });
-    }else{
-     $("#prog_a").css('display','none');
-   }
- });
+      }else{
+       $("#prog_a").css('display','none');
+     }
+   });
 
-  $("#file_b").on("change",function(){
-    if($("#file_b").val()!=""){
-      $("#prog_b").css('display','block');
-      $("#prog_b").val(0);    
-      $(".img_b").css({'background':"url('')"}); 
-      setTimeout(function () { $(".img_b").css({'background':"rgba(88,88,88,.1)"}); }, 2);
-      $("#file_b").upload(temp_url_c2,function(success){
-        console.log("done",success);
-        if(success!=false){
-          $(".img_b").css('display','none');
-          $("#prog_b").fadeOut();
-          $(".img_b").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
-          $(".img_b").fadeIn();
-        }else{
-          console.log("fail !");
-        }
-      },function(prog,value){
+    $("#file_b").on("change",function(){
+      if($("#file_b").val()!=""){
+        $("#prog_b").css('display','block');
+        $("#prog_b").val(0);    
+        $(".img_b").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_b").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_b").upload(temp_url_c2,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_b").css('display','none');
+            $("#prog_b").fadeOut();
+            $(".img_b").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_b").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
                     //console.log(value);
                     $("#prog_b").val(value);
                   });
-    }else{
-     $("#prog_b").css('display','none');
-   }
- });
+      }else{
+       $("#prog_b").css('display','none');
+     }
+   });
 
-
-  $("#file_c").on("change",function(){
-    if($("#file_c").val()!=""){
-      $("#prog_c").css('display','block');
-      $("#prog_c").val(0);    
-      $(".img_c").css({'background':"url('')"}); 
-      setTimeout(function () { $(".img_c").css({'background':"rgba(88,88,88,.1)"}); }, 2);
-      $("#file_c").upload(temp_url_l1,function(success){
-        console.log("done",success);
-        if(success!=false){
-          $(".img_c").css('display','none');
-          $("#prog_c").fadeOut();
-          $(".img_c").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
-          $(".img_c").fadeIn();
-        }else{
-          console.log("fail !");
-        }
-      },function(prog,value){
-                    //console.log(value);
-                    $("#prog_c").val(value);
-                  });
-    }else{
-     $("#prog_c").css('display','none');
-   }
- });
-
-
-
-  $("#file_d").on("change",function(){
-    if($("#file_d").val()!=""){
-      $("#prog_d").css('display','block');
-      $("#prog_d").val(0);    
-      $(".img_d").css({'background':"url('')"}); 
-      setTimeout(function () { $(".img_d").css({'background':"rgba(88,88,88,.1)"}); }, 2);
-      $("#file_d").upload(temp_url_l2,function(success){
-        console.log("done",success);
-        if(success!=false){
-          $(".img_d").css('display','none');
-          $("#prog_d").fadeOut();
-          $(".img_d").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
-          $(".img_d").fadeIn();
-        }else{
-          console.log("fail !");
-        }
-      },function(prog,value){
-                    //console.log(value);
-                    $("#prog_d").val(value);
-                  });
-    }else{
-     $("#prog_d").css('display','none');
-   }
- });
-
-
-
-  $("#file_e").on("change",function(){
-    if($("#file_e").val()!=""){
-      $("#prog_e").css('display','block');
-      $("#prog_e").val(0);    
-      $(".img_e").css({'background':"url('')"}); 
-      setTimeout(function () { $(".img_e").css({'background':"rgba(88,88,88,.1)"}); }, 2);
-      $("#file_e").upload(temp_url_l3,function(success){
-        console.log("done",success);
-        if(success!=false){
-          $(".img_e").css('display','none');
-          $("#prog_e").fadeOut();
-          $(".img_e").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
-          $(".img_e").fadeIn();
-        }else{
-          console.log("fail !");
-        }
-      },function(prog,value){
-                    //console.log(value);
-                    $("#prog_e").val(value);
-                  });
-    }else{
-     $("#prog_e").css('display','none');
-   }
- });
-
-
-  $("#file_f").on("change",function(){
-    if($("#file_f").val()!=""){
-      $("#prog_f").css('display','block');
-      $("#prog_f").val(0);    
-      $(".img_f").css({'background':"url('')"}); 
-      setTimeout(function () { $(".img_f").css({'background':"rgba(88,88,88,.1)"}); }, 2);
-      $("#file_f").upload(temp_url_l4,function(success){
-        console.log("done",success);
-        if(success!=false){
-          $(".img_f").css('display','none');
-          $("#prog_f").fadeOut();
-          $(".img_f").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
-          $(".img_f").fadeIn();
-        }else{
-          console.log("fail !");
-        }
-      },function(prog,value){
-                    //console.log(value);
-                    $("#prog_f").val(value);
-                  });
-    }else{
-     $("#prog_f").css('display','none');
-   }
- });
-
-
-        //end jquery
-      });
+  });
 });
+
+
+
+app.controller('editLook',function($scope,$location,send,popup,$ionicLoading,$stateParams){
+  var user_id=window.localStorage['user_id']='540';
+  console.log($stateParams.id)
+  var url="http://lab.cijcorp.com/mkone/server/ws/view-looking-detail-ws.php";
+  var data={tel:$stateParams.id};
+  send.http(url,data).success(function(data){
+    console.log(data);
+  });
+
+  $(function(){
+    var img_url="http://lab.cijcorp.com/mkone/server/temp/";
+    var temp_url_l1="http://lab.cijcorp.com/mkone/server/upload/upload_l1.php?uid="+user_id;
+    var temp_url_l2="http://lab.cijcorp.com/mkone/server/upload/upload_l2.php?uid="+user_id;
+    var temp_url_l3="http://lab.cijcorp.com/mkone/server/upload/upload_l3.php?uid="+user_id;
+    var temp_url_l4="http://lab.cijcorp.com/mkone/server/upload/upload_l4.php?uid="+user_id;
+
+
+    $("#file_c").on("change",function(){
+      if($("#file_c").val()!=""){
+        $("#prog_c").css('display','block');
+        $("#prog_c").val(0);    
+        $(".img_c").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_c").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_c").upload(temp_url_l1,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_c").css('display','none');
+            $("#prog_c").fadeOut();
+            $(".img_c").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_c").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_c").val(value);
+                    });
+      }else{
+       $("#prog_c").css('display','none');
+     }
+   });
+
+
+
+    $("#file_d").on("change",function(){
+      if($("#file_d").val()!=""){
+        $("#prog_d").css('display','block');
+        $("#prog_d").val(0);    
+        $(".img_d").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_d").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_d").upload(temp_url_l2,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_d").css('display','none');
+            $("#prog_d").fadeOut();
+            $(".img_d").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_d").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_d").val(value);
+                    });
+      }else{
+       $("#prog_d").css('display','none');
+     }
+   });
+
+
+
+    $("#file_e").on("change",function(){
+      if($("#file_e").val()!=""){
+        $("#prog_e").css('display','block');
+        $("#prog_e").val(0);    
+        $(".img_e").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_e").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_e").upload(temp_url_l3,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_e").css('display','none');
+            $("#prog_e").fadeOut();
+            $(".img_e").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_e").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_e").val(value);
+                    });
+      }else{
+       $("#prog_e").css('display','none');
+     }
+   });
+
+
+    $("#file_f").on("change",function(){
+      if($("#file_f").val()!=""){
+        $("#prog_f").css('display','block');
+        $("#prog_f").val(0);    
+        $(".img_f").css({'background':"url('')"}); 
+        setTimeout(function () { $(".img_f").css({'background':"rgba(88,88,88,.1)"}); }, 2);
+        $("#file_f").upload(temp_url_l4,function(success){
+          console.log("done",success);
+          if(success!=false){
+            $(".img_f").css('display','none');
+            $("#prog_f").fadeOut();
+            $(".img_f").css({'background':"url('"+img_url+success+"') 0 0 no-repeat",'background-size':'200px'});
+            $(".img_f").fadeIn();
+          }else{
+            console.log("fail !");
+          }
+        },function(prog,value){
+                      //console.log(value);
+                      $("#prog_f").val(value);
+                    });
+      }else{
+       $("#prog_f").css('display','none');
+     }
+   });
+
+
+    //end jquery
+  });
+
+});
+
+
 
 
