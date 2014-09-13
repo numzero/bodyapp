@@ -5,7 +5,7 @@
     width: 200px;
     height: 220px;
     display: inline-block;
-    background: url('img/plus.png') 0 0 no-repeat;
+    
     background-size: 200px;         
 }
 input[type='file']{
@@ -39,13 +39,13 @@ progress{
                     </div>
                     <label class="item item-input">
                         <span class="input-label">Tel.</span>
-                        <input type="text" name="txt_id" value="{{id}}"  ng-readonly="true">
+                        <input type="text" name="txt_id" value="{{list.tel}}"  ng-readonly="true">
                     </label>
 
                     <label class="item item-input " 
                     ng-class="{'invalid-false':form.txt_look.$invalid && !form.txt_look.$pristine,'invalid-true':form.txt_look.$invalid ==false}">
                     <span class="input-label">Looking For</span>
-                    <input type="text" required maxlength="100" name="txt_look" ng-model="formData.txt_look" placeholder="Looking For" >
+                    <input type="text" required maxlength="100" name="txt_look" ng-model="list.look" placeholder="Looking For" >
                 </label>
 
 

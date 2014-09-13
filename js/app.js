@@ -491,21 +491,48 @@ $(function(){
 
 app.controller('editCon',function($scope,$location,send,popup,$ionicLoading,$stateParams){
   var user_id=window.localStorage['user_id']='540';
-  console.log($stateParams.id)
+  
   var url="http://lab.cijcorp.com/mkone/server/ws/view-contact-detail-ws.php";
   var data={tel:$stateParams.id};
   send.http(url,data).success(function(data){
-    console.log(data);
+
     $scope.formData={
       name:data[0][2],
       nname:data[0][1],
       tel:data[0][0],
       email:data[0][3],
       keyword:data[0][4],
-      type:data[0][5]
+      type:data[0][5],
+      user_id:user_id
     };
+
+    var img_url="http://lab.cijcorp.com/mkone/server/real/";
+    word=['a','b'];
+    j=0;
+    for(i=7;i<9;i++){
+      if(data[0][i]=="none.jpeg"){
+        data[0][i]="img/plus";
+      }else{
+        data[0][i]=img_url+data[0][i];
+      }
+      $(".img_"+word[j]).css({'background':"url('"+data[0][i]+"') 0 0 no-repeat",'background-size':'200px'}); 
+      j++;
+    }
+
   });
 
+  $scope.save=function(){
+    var url="http://lab.cijcorp.com/mkone/server/ws/edit-list-ws.php";
+    var data=$scope.formData;
+    console.log(data);
+    send.http(url,data).success(function(data){
+    
+      if(data==true){
+        $location.path("/main/list");
+      }
+    })
+    
+  }
 
   $(function(){
 
@@ -569,14 +596,40 @@ app.controller('editCon',function($scope,$location,send,popup,$ionicLoading,$sta
 
 
 
-app.controller('editLook',function($scope,$location,send,popup,$ionicLoading,$stateParams){
+app.controller('editLook',function($scope,$location,send,popup,$ionicLoading,$stateParams,$ionicLoading){
   var user_id=window.localStorage['user_id']='540';
-  console.log($stateParams.id)
+  $ionicLoading.show({
+    template:'<i class="icon ion-looping"></i>',
+    animation:'fade-in'
+  })
   var url="http://lab.cijcorp.com/mkone/server/ws/view-looking-detail-ws.php";
   var data={tel:$stateParams.id};
   send.http(url,data).success(function(data){
-    console.log(data);
+    $scope.list={user_id:user_id,tel:data[0],look:data[1],date:data[2]};
+    var img_url="http://lab.cijcorp.com/mkone/server/real/";
+    word=['c','d','e','f'];
+    j=0;
+    for(i=4;i<8;i++){
+      if(data[i]=="none.jpeg"){
+        data[i]="img/plus";
+      }else{
+        data[i]=img_url+data[i];
+      }
+      $(".img_"+word[j]).css({'background':"url('"+data[i]+"') 0 0 no-repeat",'background-size':'200px'}); 
+      j++;
+    }
+    $ionicLoading.hide();
   });
+  $scope.save=function(){
+    var url="http://lab.cijcorp.com/mkone/server/ws/edit-looking-ws.php";
+    var data=$scope.list;
+    send.http(url,data).success(function(data){
+      if(data==true){
+        $location.path("/main/look");
+      }
+    })
+    
+  }
 
   $(function(){
     var img_url="http://lab.cijcorp.com/mkone/server/temp/";
