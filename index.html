@@ -1,22 +1,123 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title></title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>^ ^</title>
+  <script src="components/platform/platform.js"></script>
+  <script src=""></script>
+  <link rel="import" href="components/font-roboto/roboto.html">
+  <link rel="import"
+  href="components/core-header-panel/core-header-panel.html">
+  <link rel="import"
+  href="components/core-toolbar/core-toolbar.html">
+  <link rel="import"
+  href="components/paper-tabs/paper-tabs.html">
+  <link rel="import" href="card.html">
+  <style>
+  html,body {
+    height: 100%;
+    margin: 0;
+    background-color: #E5E5E5;
+    font-family: 'RobotoDraft', sans-serif;
+  }
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
-    <script type="text/javascript" src="lib/upload/lib/js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="lib/upload/lib/js/jquery-upload.js"></script>
+  core-header-panel {
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch; 
+  }
 
-    <script src="cordova.js"></script>
+  core-toolbar {
+    background: #53A7FB;
+    color: white;
+  }
 
-    <script src="js/app.js"></script>
+  #tabs {
+    width: 100%;
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /*text-transform: uppercase;*/
+    font-size: 18px;
+  }
+
+  .container {
+    width: 600px;
+    margin: 40px auto;
+  }
+  post-card{
+    margin: 10px auto;
+  }
+
+  @media (max-width: 800px){
+    .container {
+      width: 400px;
+    }
+  }
+
+  @media (max-width: 500px){
+    .container {
+      width: 250px;
+    }
+  }
+
+  </style>
+</head>
+<body unresolved>
+
+<core-header-panel>
+
+  <core-toolbar>
+      <paper-tabs id="tabs" selected="who" self-end>
+      <paper-tab name="who">Who?</paper-tab>
+      <paper-tab name="like">Like</paper-tab>
+      </paper-tabs>
+  </core-toolbar>
   
-  </head>
-  <body ng-app="mkone">
-    <ion-nav-view class="bg-j" animation="slide-left-right"></ion-nav-view>
-  </body>
+  
+  <div class="container" layout vertical center>
+      <post-card>
+        <img width="70" height="70"
+        src="img/avatar-01.svg">
+        <h2>Jame Developer</h2>
+        <p>HTML</p>
+        <p>CSS</p>
+        <p>Js</p>
+        <p>Secret base</p>
+       </post-card>
+
+       <post-card>
+        <img width="70" height="70"
+        src="img/avatar-05.svg">
+        <h2>Another Developer</h2>
+       </post-card>
+
+       <post-card>
+        <img width="70" height="70"
+        src="img/avatar-06.svg">
+        <h2>Another Developer</h2>
+       </post-card>
+
+       <post-card>
+        <img width="70" height="70"
+        src="img/avatar-07.svg">
+        <h2>Another Developer</h2>
+       </post-card>
+  </div>
+
+
+</core-header-panel>
+
+
+<script>
+  var tabs = document.querySelector('paper-tabs');
+
+  tabs.addEventListener('core-select', function() {
+    console.log("Selected: " + tabs.selected);
+  });
+
+</script>
+</body>
 </html>
