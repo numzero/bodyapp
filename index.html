@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
   <meta charset="UTF-8">
   <title>^ ^</title>
   <script src="components/platform/platform.js"></script>
@@ -12,56 +13,55 @@
   href="components/core-toolbar/core-toolbar.html">
   <link rel="import"
   href="components/paper-tabs/paper-tabs.html">
-  <link rel="import" href="card.html">
+  <link rel="import" href="post-list.html">
+ 
   <style>
-  html,body {
-    height: 100%;
-    margin: 0;
-    background-color: #E5E5E5;
-    font-family: 'RobotoDraft', sans-serif;
-  }
+      html,body {
+        height: 100%;
+        margin: 0;
+        background-color: #E5E5E5;
+        font-family: 'RobotoDraft', sans-serif;
+      }
 
-  core-header-panel {
-    height: 100%;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch; 
-  }
+      core-header-panel {
+        height: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch; 
+      }
 
-  core-toolbar {
-    background: #53A7FB;
-    color: white;
-  }
+      core-toolbar {
+        background: #53A7FB;
+        color: white;
+      }
 
-  #tabs {
-    width: 100%;
-    margin: 0;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /*text-transform: uppercase;*/
-    font-size: 18px;
-  }
+      #tabs {
+        width: 100%;
+        margin: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        /*text-transform: uppercase;*/
+        font-size: 18px;
+      }
 
-  .container {
-    width: 600px;
-    margin: 40px auto;
-  }
-  post-card{
-    margin: 10px auto;
-  }
+      .container {
+        width: 600px;
+        margin: 40px auto;
+      }
 
-  @media (max-width: 800px){
-    .container {
-      width: 400px;
-    }
-  }
 
-  @media (max-width: 500px){
-    .container {
-      width: 250px;
-    }
-  }
+      @media (max-width: 800px){
+        .container {
+          width: 400px;
+        }
+      }
+
+      @media (max-width: 500px){
+        .container {
+          width: 250px;
+        }
+      }
 
   </style>
 </head>
@@ -70,54 +70,27 @@
 <core-header-panel>
 
   <core-toolbar>
-      <paper-tabs id="tabs" selected="who" self-end>
-      <paper-tab name="who">Who?</paper-tab>
-      <paper-tab name="like">Like</paper-tab>
-      </paper-tabs>
+    
+       <paper-tabs id="tabs" selected="all" self-end>
+        <paper-tab name="all">All</paper-tab>
+        <paper-tab name="favorites">Favorites</paper-tab>
+        </paper-tabs>
   </core-toolbar>
   
-  
   <div class="container" layout vertical center>
-      <post-card>
-        <img width="70" height="70"
-        src="img/avatar-01.svg">
-        <h2>Jame Developer</h2>
-        <p>HTML</p>
-        <p>CSS</p>
-        <p>Js</p>
-        <p>Secret base</p>
-       </post-card>
-
-       <post-card>
-        <img width="70" height="70"
-        src="img/avatar-05.svg">
-        <h2>Another Developer</h2>
-       </post-card>
-
-       <post-card>
-        <img width="70" height="70"
-        src="img/avatar-06.svg">
-        <h2>Another Developer</h2>
-       </post-card>
-
-       <post-card>
-        <img width="70" height="70"
-        src="img/avatar-07.svg">
-        <h2>Another Developer</h2>
-       </post-card>
+    <post-list show="all"></post-list>
   </div>
-
 
 </core-header-panel>
 
 
 <script>
-  var tabs = document.querySelector('paper-tabs');
+var tabs = document.querySelector('paper-tabs');
+var list = document.querySelector('post-list');
 
-  tabs.addEventListener('core-select', function() {
-    console.log("Selected: " + tabs.selected);
-  });
-
+tabs.addEventListener('core-select', function() {
+  list.show = tabs.selected;
+});
 </script>
 </body>
 </html>
